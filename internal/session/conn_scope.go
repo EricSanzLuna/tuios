@@ -187,6 +187,7 @@ var verbScopes = map[string]scopeKind{
 	"refresh-dock":         scopeDeny,
 	"pip":                  scopeDeny,
 	"rail-pane":            scopeDeny,
+	"privacy":              scopeDeny, // a pane must not unhide what it cannot see, or hide itself
 	"new-session":          scopeDeny,
 	// switch-session moves a client and detach-client takes clients off
 	// their sessions: client-level actions, like attach.

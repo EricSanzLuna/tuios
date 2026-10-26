@@ -468,6 +468,23 @@ func buildVerbRegistry() map[string]verbEntry {
 			},
 			handler: (*Daemon).verbPiP,
 		},
+		"privacy": {
+			description: "Turn an attached client's privacy mode on or off, or say whether it is on. While it is on, the client draws every pane marked private as a placeholder and keeps its contents off every other surface. The mode belongs to the client, not the session, and needs an attached client.",
+			params: []verbParam{
+				sessionParam,
+				{Name: "client", Type: "string", Description: "Id of the attached client to reach, from list-clients. Omit to reach the client run-command reaches. Not with session."},
+				{Name: "state", Type: "string", Description: "on or off. Omit to ask."},
+			},
+			returns: []verbParam{
+				{Name: "privacy", Type: "bool", Description: "Whether the client's privacy mode is on now."},
+				{Name: "client_id", Type: "string", Description: "Id of the client that answered."},
+			},
+			examples: []string{
+				`{"id":1,"verb":"privacy","params":{"session":"work","state":"on"}}`,
+				`{"id":1,"verb":"privacy","params":{"session":"work"}}`,
+			},
+			handler: (*Daemon).verbPrivacy,
+		},
 		"list-sessions": {
 			description: "List all sessions the daemon holds.",
 			examples:    []string{`{"id":1,"verb":"list-sessions"}`},

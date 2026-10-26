@@ -203,8 +203,12 @@ func TestPrivacyHidesAPrivatePane(t *testing.T) {
 	}
 
 	// The mode comes on for this client.
-	out, err = tuiosCLI(t, base, "privacy", "on", "-s", "work")
-	if err != nil || !strings.Contains(out, "client_id") {
+	out, err = tuiosCLI(t, base, "privacy", "on", "-s", "work", "--json")
+	var mode struct {
+		Privacy  bool   `json:"privacy"`
+		ClientID string `json:"client_id"`
+	}
+	if err != nil || json.Unmarshal([]byte(out), &mode) != nil || !mode.Privacy || mode.ClientID == "" {
 		t.Fatalf("tuios privacy on: %v\n%s", err, out)
 	}
 	if err := term.WaitFor(func(s tuitest.Screen) bool {
@@ -213,7 +217,7 @@ func TestPrivacyHidesAPrivatePane(t *testing.T) {
 	}, uiTimeout); err != nil {
 		t.Fatalf("with the mode on the vault pane still shows %v\n%s", leaked(term.Screen().Text()), term.Snapshot())
 	}
-	if out, err := tuiosCLI(t, base, "privacy", "-s", "work"); err != nil || !strings.Contains(out, "on") {
+	if out, err := tuiosCLI(t, base, "privacy", "-s", "work"); err != nil || !strings.Contains(out, "is on") {
 		t.Fatalf("tuios privacy does not say on: %v\n%s", err, out)
 	}
 	hostMark := len(host.String())

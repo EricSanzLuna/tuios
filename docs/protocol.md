@@ -2822,6 +2822,35 @@ Response:
 {"result": {"type": "pip", "pinned": true, "window_id": "6a7ad980-..."}}
 ```
 
+### privacy
+
+Turn an attached client's privacy mode on or off, or ask whether it is on.
+While it is on, the client draws every pane marked private as a placeholder
+and keeps the pane's contents off every other surface.
+
+Params: `session` (optional), `client` (optional; a client ID from
+`list-clients`, not with `session`), `state` (optional; `on` or `off`). Omit
+`state` to ask.
+
+The mode belongs to the client, not to the session. It is not in session
+state, so the verb needs an attached client and fails with `needs_client`
+without one. Without `client` it reaches the client that `run-command`
+reaches. The marks are session state (`private` on a window) and this verb
+does not set them. A restricted connection is refused, so a program in a pane
+cannot turn the mode off to see a hidden pane.
+
+Request:
+
+```json
+{"verb": "privacy", "params": {"session": "work", "state": "on"}}
+```
+
+Response:
+
+```json
+{"result": {"type": "privacy", "privacy": true, "client_id": "client-1792..."}}
+```
+
 ### rail-pane
 
 Start, keep or close the session's rail pane: the pane a client draws in its
@@ -6616,7 +6645,7 @@ the one before. The configuration is in
 | `list` | `list-*`, `session-info`, `ssh-agent-path`, `display-env`, `get-window`, `capture-pane`, `screenshot`, `get-option`, `get-agent-state`, `resolve-pane`, `explain-agent-*`, `wait-for`, `subscribe`, `unsubscribe`, `peek-prompt`, `read-dir`, `wait-dir`, `compare-fan`, `agent-activity`, `get-approval`, `file-stat`, `file-list`, `list-tasks`, `get-task` |
 | `mail` | `send-agent-message`, `read-agent-messages`, `agent-mail-notice`, `stash-put`, `stash-list`, `stash-get` |
 | `open` | `new-session`, `new-window`, `split-window`, `popup`, `new-worktree`, `fan`, `start-agent`, `open-pane`, `resize-pane`, `close-pane`, `pane-cwd`, `pane-agent`, `pane-calls` |
-| `write` | `send-keys`, `send-text`, `ask-agent`, `run-command`, `switch-session`, `detach-client`, `close-window`, `close-workspace`, `kill-session`, `focus-window`, `move-window`, `set-window`, `select-workspace`, `set-layout`, `resize`, `set-option`, `set-session-*`, `set-workspace-*`, `set-agent-*`, `resume-agent`, `request-approval`, `refresh-dock`, `pip`, `remove-worktree`, `bundle-worktree`, `run`, `ask-human` (whose handler refuses a link caller anyway), `review-diff` (it returns file contents), `review-note`, `review-stage`, `send-review`, `queue-prompt`, `cancel-queued`, `keep-fan`, `add-task`, `claim-task`, `finish-task`, `set-task-stage`, `block-task`, `release-task`, `remove-task` |
+| `write` | `send-keys`, `send-text`, `ask-agent`, `run-command`, `switch-session`, `detach-client`, `close-window`, `close-workspace`, `kill-session`, `focus-window`, `move-window`, `set-window`, `select-workspace`, `set-layout`, `resize`, `set-option`, `set-session-*`, `set-workspace-*`, `set-agent-*`, `resume-agent`, `request-approval`, `refresh-dock`, `pip`, `privacy`, `remove-worktree`, `bundle-worktree`, `run`, `ask-human` (whose handler refuses a link caller anyway), `review-diff` (it returns file contents), `review-note`, `review-stage`, `send-review`, `queue-prompt`, `cancel-queued`, `keep-fan`, `add-task`, `claim-task`, `finish-task`, `set-task-stage`, `block-task`, `release-task`, `remove-task` |
 | `open` and `write` | `verify-fan` |
 | `open` and `files` | `paste-pane-image` |
 | `write` and `files` | `paste-image` |

@@ -3177,6 +3177,17 @@ func (m *OS) handleMsg(msg tea.Msg) (model tea.Model, cmd tea.Cmd) {
 				}
 			}
 			return m, relisten
+		case "privacy":
+			// The privacy verb: TapeArgs are "on", "off", or "" to ask. The
+			// mode is this client's alone, so nothing is pushed to the daemon.
+			if len(msg.TapeArgs) > 0 && msg.TapeArgs[0] != "" {
+				m.SetPrivacy(msg.TapeArgs[0] == "on")
+			}
+			if m.DaemonClient != nil && msg.RequestID != "" {
+				_ = m.DaemonClient.SendCommandResultWithData(msg.RequestID, true, "command executed",
+					map[string]any{"privacy": m.PrivacyOn()})
+			}
+			return m, relisten
 		case "swap_windows":
 			// herdr's pane.swap: the daemon names the pair. TapeArgs are the
 			// source and the target window ids.

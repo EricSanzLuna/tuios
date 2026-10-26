@@ -486,6 +486,13 @@ tuios pip -s work --off    # unpin whatever is pinned
 It needs a client attached. A pane needs the `admin` grant for it, like the
 other window-manager verbs. Do not pin a pane the person did not ask about.
 
+A person can mark a pane private and turn on privacy mode before a screen
+share. Their client then draws the pane as a placeholder. `tuios privacy`
+turns the mode on or off, and a program in a pane cannot run it. The mark is
+the `private` field of `get-window`. A private pane is still read normally by
+`capture-pane`, so do not paste what you read from one into a pane the person
+shares.
+
 ### The escape hatch
 
 A keybinding with no verb of its own is reachable by name. Every action

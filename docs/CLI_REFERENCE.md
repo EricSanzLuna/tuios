@@ -3572,6 +3572,43 @@ tuios pip agent
 tuios pip --off
 ```
 
+### `tuios privacy`
+
+Turn privacy mode on or off for the attached client, or say whether it is on.
+
+**Usage:**
+```bash
+tuios privacy [on|off] [flags]
+```
+
+While privacy mode is on, the client draws every pane marked private as a
+placeholder, and nothing such a pane prints reaches another surface. Mark a
+pane with the `toggle_pane_private` action. With no argument the command says
+whether the mode is on.
+
+The mode belongs to the client, not to the session, so the command needs an
+attached client, and a detach forgets the mode. With more than one client
+attached, it reaches the client that `tuios run-command` reaches, or the one
+`--client` names. A program in a pane cannot run it. See
+[SESSIONS.md](SESSIONS.md#privacy-mode).
+
+**Flags:**
+- `-s, --session <name>`: Target session (default: this pane's session, else the most recently active)
+- `--client <id>`: The attached client to reach, from `tuios list-clients`. Not with `--session`
+- `--json`: Output as JSON
+
+**Examples:**
+```bash
+# Before a screen share
+tuios privacy on
+
+# After it
+tuios privacy off
+
+# Is it on?
+tuios privacy
+```
+
 ### `tuios call`
 
 Send one verb to the daemon and print its reply as JSON.
