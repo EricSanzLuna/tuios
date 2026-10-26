@@ -212,6 +212,18 @@ func (m *OS) renderTerminal(window *terminal.Window, isFocused bool, inTerminalM
 		dim = max(dim, multiCopyParkedDim)
 	}
 
+	// A private pane in privacy mode is drawn as its placeholder, ahead of the
+	// cache: the cached frame is the pane's own cells. Nothing here reads the
+	// emulator, and nothing is cached, so no frame of the pane's text is kept
+	// while it is hidden. Turning the mode on or off marks every pane dirty.
+	if m.hidesPane(window) {
+		out := privatePlaceholder(window)
+		if renderTraceEnabled {
+			traceRender(window, isFocused, inTerminalMode, entryDirty, "private", out)
+		}
+		return out
+	}
+
 	cacheUsable := window.CachedContent != "" && window.CachedContentDim() == dim
 
 	// A copy sweep is the one thing that changes what a pane looks like

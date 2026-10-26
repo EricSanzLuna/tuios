@@ -1473,7 +1473,7 @@ func (m *OS) GetKittyGraphicsCmd() tea.Cmd {
 				// so a minimized icat/chafa image never reappeared on restore.
 				// The info==nil delete is now reserved for windows genuinely
 				// removed from m.Windows (closed).
-				visible := w.Workspace == m.CurrentWorkspace && !w.Minimized
+				visible := w.Workspace == m.CurrentWorkspace && !w.Minimized && !m.hidesPane(w)
 				// Snapshotted above, outside kp.mu; see
 				// snapshotPlacementScrollbackLens for why it cannot be read here.
 				scrollbackLen := m.placementScrollbackLen[w.ID]

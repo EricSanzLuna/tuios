@@ -1333,6 +1333,7 @@ func (m *OS) updateWindowFromState(w *terminal.Window, ws *session.WindowState) 
 	w.Zoomed = ws.Zoomed
 	// The private mark is the session's. See WindowState.Private.
 	w.Private = ws.Private
+	w.SetPrivacyHidden(m.hidesPane(w))
 	// A popup is layout intent too. Its box is declined above for the reason the
 	// zoom box is, and applyPopupRects recomputes it here.
 	w.IsPopup = ws.Popup
@@ -1561,6 +1562,7 @@ func (m *OS) newWindowFromState(ws *session.WindowState) *terminal.Window {
 	}
 
 	adoptWindowState(window, *ws)
+	window.SetPrivacyHidden(m.hidesPane(window))
 
 	m.installPassthroughs(window)
 	m.setupCwdWatch(window)

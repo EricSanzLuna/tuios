@@ -201,6 +201,13 @@ func (m *OS) setupKittyPassthrough(window *terminal.Window) {
 		if win.DaemonMode && cmd.Action == vt.KittyActionQuery {
 			return
 		}
+		// A private pane in privacy mode sends no image to the host: the
+		// host would draw it over the placeholder. An image sent while the
+		// pane is hidden is not shown when it comes back; the program's next
+		// frame is.
+		if win.PrivacyHidden() && cmd.Action != vt.KittyActionQuery {
+			return
+		}
 		// A path from a pane on another machine names a file over there.
 		// That machine's daemon reads it and sends the bytes
 		// (session/kitty_link_far.go); one that reaches this client anyway

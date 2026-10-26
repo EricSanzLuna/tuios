@@ -73,6 +73,11 @@ func (m *OS) paneCursor() (cur *tea.Cursor, hidden bool) {
 	if m.DrawsTML(window) {
 		return nil, false
 	}
+	// A hidden private pane shows a placeholder. Its cursor would point into a
+	// screen that is not drawn, and its position says where the text is.
+	if m.hidesPane(window) {
+		return nil, false
+	}
 
 	// Hide during copy mode, scrollback, or when VT hides cursor.
 	// IsCursorHidden, CursorPosition and CursorStyle read emulator state that

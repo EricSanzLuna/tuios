@@ -413,6 +413,11 @@ func (m *OS) setupSixelPassthrough(window *terminal.Window) {
 	sp.wakers[id] = window.NoteRedraw
 	sp.mu.Unlock()
 	window.Terminal.SetSixelPassthroughFunc(func(cmd *vt.SixelCommand, cursorX, _ int) uint32 {
+		// A private pane in privacy mode shows its placeholder, which has no
+		// marker cells; an image drawn now is not shown, so it is not decoded.
+		if window.PrivacyHidden() {
+			return 0
+		}
 		rows, cols := vt.SixelCells(cmd, cmd.CellWidth, cmd.CellHeight)
 		return sp.Register(id, cmd, symbolView(rows, cols, cursorX, term.Width(), term.Height()))
 	})

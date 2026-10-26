@@ -1,6 +1,12 @@
 package app
 
-import "github.com/Gaurav-Gosain/tuios/internal/terminal"
+import (
+	"strings"
+
+	"github.com/charmbracelet/x/ansi"
+
+	"github.com/Gaurav-Gosain/tuios/internal/terminal"
+)
 
 // Privacy mode: while it is on, every pane marked private (Window.Private) is
 // drawn as a placeholder, and nothing it printed reaches another surface. The
@@ -25,6 +31,19 @@ func (m *OS) hidesPane(w *terminal.Window) bool {
 	return m.privacy && w != nil && w.Private
 }
 
+// publishPrivacy follows a change of the mode or of a mark: every pane's
+// hidden flag is set again for the goroutines that hand output to the host,
+// and every cached frame is dropped, since it may hold a private pane's cells
+// or its placeholder.
+func (m *OS) publishPrivacy() {
+	for _, w := range m.Windows {
+		if w != nil {
+			w.SetPrivacyHidden(m.hidesPane(w))
+		}
+	}
+	m.MarkAllDirty()
+}
+
 // TogglePrivacy is toggle_privacy: it turns this client's privacy mode on or
 // off.
 func (m *OS) TogglePrivacy() { m.SetPrivacy(!m.privacy) }
@@ -34,9 +53,7 @@ func (m *OS) TogglePrivacy() { m.SetPrivacy(!m.privacy) }
 func (m *OS) SetPrivacy(on bool) {
 	if m.privacy != on {
 		m.privacy = on
-		// Every cached frame may hold a private pane's cells, or its
-		// placeholder.
-		m.MarkAllDirty()
+		m.publishPrivacy()
 	}
 	if on {
 		m.ShowNotification("Privacy mode on: private panes are hidden", "info", m.Settings.NotificationDuration)
@@ -54,7 +71,7 @@ func (m *OS) TogglePanePrivate() {
 		return
 	}
 	w.Private = !w.Private
-	m.MarkAllDirty()
+	m.publishPrivacy()
 	name := w.CustomName
 	if name == "" {
 		name = "This pane"
@@ -68,6 +85,47 @@ func (m *OS) TogglePanePrivate() {
 		m.ShowNotification(name+" is no longer private", "info", m.Settings.NotificationDuration)
 	}
 	m.SyncStateToDaemon()
+}
+
+// privatePlaceholder is what a hidden pane's body shows: its content area,
+// blank, with the label in the middle and, under a name the user gave it, the
+// words "Private pane". It is built from the window's size and name alone, so
+// nothing the pane printed can reach it.
+func privatePlaceholder(window *terminal.Window) string {
+	cols, rows := window.ContentWidth(), window.ContentHeight()
+	if cols <= 0 || rows <= 0 {
+		return ""
+	}
+	lines := []string{privateLabel(window)}
+	if lines[0] != privatePaneLabel {
+		lines = append(lines, privatePaneLabel)
+	}
+	if len(lines) > rows {
+		lines = lines[:rows]
+	}
+	top := (rows - len(lines)) / 2
+	blank := strings.Repeat(" ", cols)
+	var b strings.Builder
+	for y := range rows {
+		if y > 0 {
+			b.WriteByte('\n')
+		}
+		i := y - top
+		if i < 0 || i >= len(lines) {
+			b.WriteString(blank)
+			continue
+		}
+		text := lines[i]
+		if ansi.StringWidth(text) > cols {
+			text = ansi.Truncate(text, cols, "")
+		}
+		w := ansi.StringWidth(text)
+		left := (cols - w) / 2
+		b.WriteString(strings.Repeat(" ", left))
+		b.WriteString(text)
+		b.WriteString(strings.Repeat(" ", cols-left-w))
+	}
+	return b.String()
 }
 
 // privateLabel is the name a hidden pane shows: the name the user gave it, or

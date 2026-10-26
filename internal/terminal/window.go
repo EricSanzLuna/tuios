@@ -371,6 +371,10 @@ type Window struct {
 	// looking at, as the app last set it. The PTY reader reads it when the
 	// guest turns on focus reporting. See SetHasFocus.
 	hasFocus atomic.Bool
+	// privacyHidden is whether the pane is drawn as a privacy placeholder, as
+	// the app last set it. The PTY reader reads it to keep the pane's images
+	// off the host. See SetPrivacyHidden.
+	privacyHidden atomic.Bool
 	// focusReporting is whether the guest had focus reporting on after the
 	// last PTY read. Only the PTY reader goroutine touches it.
 	focusReporting bool
@@ -1028,6 +1032,18 @@ func (w *Window) GuestCursor() (pos uv.Position, hidden, ok bool) {
 // state on the set. A daemon pane is answered by the daemon instead.
 func (w *Window) SetHasFocus(focused bool) {
 	w.hasFocus.Store(focused)
+}
+
+// SetPrivacyHidden records whether the pane is drawn as a privacy
+// placeholder, for the goroutines that hand its output to the host.
+func (w *Window) SetPrivacyHidden(hidden bool) {
+	w.privacyHidden.Store(hidden)
+}
+
+// PrivacyHidden reports what SetPrivacyHidden last recorded. Safe from any
+// goroutine.
+func (w *Window) PrivacyHidden() bool {
+	return w.privacyHidden.Load()
 }
 
 // SetHost records the machine the pane's process runs on.
