@@ -41,6 +41,7 @@ func GetHelpCategories(registry *config.KeybindRegistry, s *config.Settings) []H
 				"next_session", "prev_session", "next_host", "prev_host",
 				"next_agent", "prev_agent",
 				"toggle_multifocus_active", "toggle_multifocus_all", "close_workspace",
+				"toggle_privacy", "toggle_pane_private",
 			}),
 		},
 		{

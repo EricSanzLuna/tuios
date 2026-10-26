@@ -443,9 +443,24 @@ func (m *OS) windowBorderRows(width int, color color.Color, window *terminal.Win
 		if marked {
 			titleMaxWidth -= len(markedPaneBadge) + 1
 		}
-		windowName = windowTitleText(window, markState, position, titleMaxWidth, &m.Settings)
+		// A private pane carries its own badge while the mode is off, taken
+		// the same way, so the mark can be seen before a call starts.
+		privateBadge := window.Private && !m.privacy
+		if privateBadge {
+			titleMaxWidth -= len(privatePaneBadge) + 1
+		}
+		if m.hidesPane(window) {
+			// The title a program set and the directory are pane output.
+			// The bar shows the placeholder's own label and nothing else.
+			windowName = overlay.Truncate(privateLabel(window), max(titleMaxWidth-6, 0))
+		} else {
+			windowName = windowTitleText(window, markState, position, titleMaxWidth, &m.Settings)
+		}
 		if marked {
 			windowName = strings.TrimSpace(windowName + " " + markedPaneBadge)
+		}
+		if privateBadge {
+			windowName = strings.TrimSpace(windowName + " " + privatePaneBadge)
 		}
 	}
 

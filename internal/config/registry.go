@@ -746,6 +746,10 @@ var ActionDescriptions = map[string]string{
 	"toggle_multifocus_all":    "Add all panes on the workspace to multifocus, or clear it",
 	"close_workspace":          "Close every pane on a workspace, after a confirmation",
 
+	// Privacy. Neither action has a default key.
+	"toggle_privacy":      "Turn privacy mode on or off: private panes show a placeholder",
+	"toggle_pane_private": "Mark the focused pane private, or remove the mark",
+
 	// Workspaces
 	"next_workspace":     "Switch to the next workspace that has panes",
 	"prev_workspace":     "Switch to the previous workspace that has panes",

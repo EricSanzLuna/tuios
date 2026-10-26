@@ -133,6 +133,7 @@ func StateFingerprint(s *SessionState) uint64 {
 		num(w.PreZoomY)
 		num(w.PreZoomW)
 		num(w.PreZoomH)
+		flag(w.Private)
 		str(w.Cwd)
 		flag(w.Unplaced)
 		str(string(w.AgentState))

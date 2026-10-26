@@ -732,6 +732,16 @@ pane, to unpin it. A click on the view focuses the pane. The action is
 `alt+esc` gives it back. The action is `focus_rail_pane`. See
 [CONFIGURATION.md](CONFIGURATION.md#the-rails-pane-section).
 
+## Privacy mode
+
+`toggle_pane_private` marks the focused pane private, or removes the mark. A
+marked pane shows `[private]` in its title bar while the mode is off.
+`toggle_privacy` turns privacy mode on or off for this client. While it is on, a
+private pane shows a placeholder and nothing it prints reaches another surface.
+The actions have no default key. The command palette has an entry for each.
+Bind them in any section; `tuios keybinds doctor` says when a key you chose
+is taken. See [SESSIONS.md](SESSIONS.md#privacy-mode).
+
 ## Spotlight
 
 `B` in window mode turns the spotlight on and off. The spotlight dims the

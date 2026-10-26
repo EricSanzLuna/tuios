@@ -1309,6 +1309,24 @@ func GetCommandPaletteItems(s *config.Settings) []CommandPaletteItem {
 			},
 		},
 		{
+			Name:     "Privacy mode: hide private panes, or show them",
+			Bind:     "toggle_privacy",
+			Category: "Session",
+			Action: func(m *OS) (*OS, tea.Cmd) {
+				m.TogglePrivacy()
+				return m, nil
+			},
+		},
+		{
+			Name:     "Privacy: mark or unmark the focused pane private",
+			Bind:     "toggle_pane_private",
+			Category: "Window",
+			Action: func(m *OS) (*OS, tea.Cmd) {
+				m.TogglePanePrivate()
+				return m, nil
+			},
+		},
+		{
 			Name:     "Picture in picture: pin or unpin the focused pane",
 			Shortcut: "p",
 			Bind:     "toggle_pip",

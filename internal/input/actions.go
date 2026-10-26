@@ -311,6 +311,7 @@ func (d *ActionDispatcher) registerHandlers() {
 
 	// Multifocus actions (see multifocus_actions.go)
 	d.registerMultifocusHandlers()
+	d.registerPrivacyHandlers()
 
 	// Tape manager actions
 	d.Register("toggle_tape_manager", handleToggleTapeManager)
