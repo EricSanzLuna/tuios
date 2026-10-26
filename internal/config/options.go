@@ -1519,6 +1519,14 @@ var optionSpecs = []Option{
 		Accepted:    PiPCorners, Default: PiPCornerBottomRight,
 	},
 
+	// [privacy]. Read when a client starts; toggle_privacy changes the mode
+	// for that client only.
+	{
+		Path: "privacy.enabled", Type: OptionBool, Section: "privacy",
+		Description: "Start in privacy mode: panes marked private show a placeholder and stay off every other surface",
+		Default:     "false",
+	},
+
 	// [mermaid]. Read each time tuios mermaid runs.
 	{
 		Path: "mermaid.theme", Type: OptionString, Section: "mermaid",

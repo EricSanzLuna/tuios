@@ -354,7 +354,7 @@ func Actions() map[string]string {
 func pageSection(name string) bool {
 	switch name {
 	case "appearance", "dock", "sidebar", "scrollbar", "selection", "screensaver",
-		"spotlight", "pip", "hints", "panes", "scratch", "workspaces":
+		"spotlight", "pip", "hints", "panes", "scratch", "workspaces", "privacy":
 		return true
 	}
 	return false

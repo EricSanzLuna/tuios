@@ -1,6 +1,7 @@
 package tuie2e
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 	"time"
@@ -163,7 +164,10 @@ func TestPrivacyHidesAPrivatePane(t *testing.T) {
 		t.Fatalf("toggle_pane_private: %v\n%s", err, out)
 	}
 	out, err := tuiosCLI(t, base, "get-window", "vault", "--json", "--session", "work")
-	if err != nil || !strings.Contains(out, `"private":true`) {
+	var marked struct {
+		Private bool `json:"private"`
+	}
+	if err != nil || json.Unmarshal([]byte(out), &marked) != nil || !marked.Private {
 		t.Fatalf("get-window vault does not say private after the mark: %v\n%s", err, out)
 	}
 	if !strings.Contains(term.Screen().Text(), privacyBody) {

@@ -96,6 +96,8 @@ func (m *OS) BuildSessionState() *session.SessionState {
 			PreZoomY: w.PreZoomY,
 			PreZoomW: w.PreZoomWidth,
 			PreZoomH: w.PreZoomHeight,
+			// The private mark is the session's: see WindowState.Private.
+			Private: w.Private,
 			// A popup is the same kind of intent again: the flag and the size
 			// the caller asked for are the session's, the box above is this
 			// client's and a peer declines it. See WindowState.Popup.
@@ -1329,6 +1331,8 @@ func (m *OS) updateWindowFromState(w *terminal.Window, ws *session.WindowState) 
 	// Zoom is layout intent too, and the caller watches for it changing so the
 	// rectangle can be recomputed here rather than adopted. See applyZoomState.
 	w.Zoomed = ws.Zoomed
+	// The private mark is the session's. See WindowState.Private.
+	w.Private = ws.Private
 	// A popup is layout intent too. Its box is declined above for the reason the
 	// zoom box is, and applyPopupRects recomputes it here.
 	w.IsPopup = ws.Popup
@@ -1477,6 +1481,8 @@ func adoptWindowState(window *terminal.Window, ws session.WindowState) {
 	// and the rectangle it implies is this client's to compute. See
 	// WindowState.Zoomed.
 	window.Zoomed = ws.Zoomed
+	// The private mark is adopted as it is. See WindowState.Private.
+	window.Private = ws.Private
 	// A popup is a float with a lifetime, and the same split applies: the mark
 	// and the asked-for size are adopted, the box is recomputed. See
 	// WindowState.Popup.

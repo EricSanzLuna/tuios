@@ -524,6 +524,53 @@ shows the note of the pane, else the note of its session.
 from its pane before it stops. The note is saved with the session, so it
 survives a daemon restart. See [`tuios note`](CLI_REFERENCE.md#tuios-note).
 
+## Privacy Mode
+
+Privacy mode hides the panes you mark private, so you can share your screen
+without showing them. Mark a pane before a call, and turn the mode on when the
+call starts.
+
+Two actions control it. Neither has a key; run them from the command palette or
+bind them in `[keybindings]`.
+
+- `toggle_pane_private` marks the focused pane private, or removes the mark.
+  While the mode is off, a marked pane shows its text and a small mark in its
+  border title.
+- `toggle_privacy` turns the mode on or off for this client. From a shell, run
+  `tuios privacy on` or `tuios privacy off`, and `tuios privacy` to see the
+  mode. When the mode is on, the dock shows it.
+
+While the mode is on, a private pane shows a placeholder with the pane's name,
+or "Private pane" when it has none. Nothing the pane prints reaches a
+different surface:
+
+- The pane shows no cursor and no images.
+- The host terminal title shows the session name.
+- The picture-in-picture view, the navigator previews and the window lists
+  show the placeholder.
+- The rail, the dock, tooltips, the switcher, the palette and the dialogs
+  show no title, directory or message from the pane.
+- Notifications from the pane (OSC 9 and OSC 777) do not show and do not reach
+  your desktop.
+- Link hover does not underline links in the pane.
+- Copy mode, hints, peek, yank and mouse selection on the pane are refused,
+  and the dock says why.
+
+The marks are in the session state. A pane stays marked after a reattach or a
+daemon restart. The mode is each client's own and is not saved: it starts
+from `[privacy] enabled`, and a detach forgets it.
+
+`tuios privacy` reaches one client, in the same way as `tuios pip`. Add
+`--client ID` to choose the client. A program in a pane cannot run it.
+
+`tuios screenshot` and `tuios capture-pane` read the daemon, not your screen,
+so they still show a private pane's text.
+
+```toml
+[privacy]
+enabled = false  # start every client in privacy mode
+```
+
 ## What Survives
 
 Four tiers of interruption, and what comes back after each. "Structure" means

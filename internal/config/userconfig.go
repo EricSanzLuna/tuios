@@ -57,6 +57,9 @@ type UserConfig struct {
 	// PiP is the [pip] table: the size and corner of the picture-in-picture
 	// view that toggle_pip pins. Client-local, like the spotlight. See pip.go.
 	PiP PiPConfig `toml:"pip"`
+	// Privacy is the [privacy] table: whether a client starts in privacy
+	// mode. Client-local, like the spotlight. See privacy.go.
+	Privacy PrivacyConfig `toml:"privacy"`
 
 	// SSH is the [ssh] table: the limits of the tuios ssh server. See ssh.go.
 	SSH SSHConfig `toml:"ssh"`

@@ -2093,6 +2093,10 @@ type OS struct {
 	// railPane is this client's view of the rail's pane section. See
 	// rail_pane.go.
 	railPaneView railPaneState
+	// privacy is this client's privacy mode: while it is on, a pane marked
+	// private is drawn as a placeholder. It starts from [privacy] enabled and
+	// is never saved, so a detach forgets it. See privacy.go.
+	privacy bool
 	// PiPPressed says the button that is down was pressed on the
 	// picture-in-picture view, so its release is the view's as well.
 	PiPPressed bool

@@ -490,6 +490,8 @@ file_drag = false
 
 `[pip]` sets the size (`width`, `height`, border included, default 40x12) and the first `corner` (default `bottom-right`) of the picture-in-picture view that `p` pins. See [SESSIONS.md](SESSIONS.md#picture-in-picture).
 
+`[privacy]` sets `enabled`, whether a client starts in privacy mode (default `false`). In privacy mode a pane marked private (`toggle_pane_private`) shows a placeholder, and nothing it prints reaches another surface. `toggle_privacy` and `tuios privacy on|off` change the mode for one client until it detaches. See [SESSIONS.md](SESSIONS.md#privacy-mode).
+
 `[[keybindings.command]]` binds a key to a command that you write: a scratch terminal, a popup, a pane or a command with no window. A mistake in an entry is a warning, and tuios ignores that entry. See [KEYBINDINGS.md](KEYBINDINGS.md#command-keys).
 
 ## Animation speed

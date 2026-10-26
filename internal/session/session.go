@@ -103,6 +103,13 @@ type WindowState struct {
 	// applyZoomState. The zero value is an unzoomed window, which is what every
 	// older client and older state reads as.
 	Zoomed bool `json:"zoomed,omitempty"`
+	// Private marks a pane whose contents a client in privacy mode draws as a
+	// placeholder and keeps off every other surface. It is session state, so a
+	// pane marked ahead of a call is still marked after a reattach or a daemon
+	// restart. The mode that acts on it is each client's own and is not saved.
+	// The zero value is an ordinary pane, which is what every older client and
+	// older state reads as.
+	Private bool `json:"private,omitempty"`
 	// PreZoomX/Y/W/H are the rectangle the pane had before it was zoomed, and
 	// they travel with the flag for the same reason the PreMinimize four do: any
 	// client may be the one that unzooms, and under a floating or untiled layout

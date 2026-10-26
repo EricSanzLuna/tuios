@@ -346,6 +346,11 @@ func windowStateToData(state *SessionState, idx int) map[string]any {
 	if w.Zoomed {
 		info["zoomed"] = true
 	}
+	// A private pane is drawn as a placeholder by a client in privacy mode.
+	// Omitted when it is not marked.
+	if w.Private {
+		info["private"] = true
+	}
 	// A floating window sits over the tiled ones at its own rectangle.
 	// Omitted when it is tiled.
 	if w.IsFloating {

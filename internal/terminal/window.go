@@ -263,6 +263,7 @@ type Window struct {
 	PreMinimizeHeight      int         // Store size before minimizing
 	Workspace              int         // Workspace this window belongs to
 	Zoomed                 bool        // True when window is zoomed (fullscreen)
+	Private                bool        // True when the pane is marked private; see session.WindowState.Private
 	PreZoomX               int         // Store position before zooming
 	PreZoomY               int         // Store position before zooming
 	PreZoomWidth           int         // Store size before zooming
