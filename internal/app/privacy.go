@@ -3,8 +3,10 @@ package app
 import (
 	"strings"
 
+	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/x/ansi"
 
+	"github.com/Gaurav-Gosain/tuios/internal/overlay"
 	"github.com/Gaurav-Gosain/tuios/internal/terminal"
 )
 
@@ -21,6 +23,25 @@ const privatePaneLabel = "Private pane"
 // name while the mode is off. Text, like markedPaneBadge, so it reads on every
 // theme and a test can find it.
 const privatePaneBadge = "[private]"
+
+// privacyChipLabel is the dock chip's name for the mode while it is on.
+const privacyChipLabel = "Private"
+
+// privacyChip is the dock chip drawn while the mode is on, with a column in
+// front of it to keep it off its neighbour, or "" while the mode is off. It
+// takes no click: turning the mode off from a stray click would show what
+// the mode hides.
+func (m *OS) privacyChip() string {
+	if !m.privacy {
+		return ""
+	}
+	pal := m.groundUI()
+	ground := pal.AccentTint
+	label := lipgloss.NewStyle().Background(ground).
+		Foreground(overlay.Readable(pal.Accent, ground)).Bold(true).
+		Render(" " + privacyChipLabel + " ")
+	return " " + label
+}
 
 // PrivacyOn reports whether this client is in privacy mode.
 func (m *OS) PrivacyOn() bool { return m.privacy }

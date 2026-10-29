@@ -1603,7 +1603,7 @@ component:
 
 ```toml
 [dock]
-left   = ["mode", "workspaces", "trail", "tape"]
+left   = ["mode", "privacy", "workspaces", "trail", "tape"]
 center = ["windows"]
 right  = ["transfers", "notifications", "copy-help", "cpu", "ram", "clock", "session-controls"]
 
@@ -1632,6 +1632,10 @@ exists. One copy is a bar and a percent, `[####--] 61%`. More copies are a
 count and a percent, `3 copies 42%`. `waiting` means a link is down, and
 `1 failed` stays until you open the Copies panel. A click opens the panel. Add
 `transfers` to your own `right` list to see it there.
+`privacy` shows `Private` while [privacy mode](SESSIONS.md#privacy-mode) is
+on, and nothing while it is off. It is always on the left. A left list
+without it still shows it, after the mode pill, so the bar always says when
+panes are hidden. A click on it does nothing.
 `session` shows the session name, workspace and pane, `main 2:1`, and is in no
 default list. `[dock.session]` takes `format` (`{session}`, `{workspace}`,
 `{pane}`) and the cell style keys `fg`, `bg`, `bold`, `cap_left` and

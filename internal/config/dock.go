@@ -31,6 +31,11 @@ const (
 	// the focused pane's place in it, "main 2:1" by default. It is a cell, so
 	// it goes wherever it is listed, and it is in no default list.
 	DockComponentSession = "session"
+	// DockComponentPrivacy is the privacy mode chip, "Private" while this
+	// client hides its private panes. It draws nothing while the mode is off,
+	// and it is drawn after the mode pill even when no list names it: it is
+	// the only sign that panes are hidden on purpose.
+	DockComponentPrivacy = "privacy"
 )
 
 // DockCustomPrefix marks a name in one of the dock lists as referring to a
@@ -42,6 +47,7 @@ const DockCustomPrefix = "custom/"
 // been instead of drawing nothing and saying nothing.
 var dockBuiltins = []string{
 	DockComponentMode,
+	DockComponentPrivacy,
 	DockComponentWorkspaces,
 	DockComponentTrail,
 	DockComponentTape,
@@ -84,6 +90,7 @@ var dockFixedSides = map[string]string{
 	DockComponentNotifications:   "right",
 	DockComponentCopyHelp:        "right",
 	DockComponentSessionControls: "right",
+	DockComponentPrivacy:         "left",
 }
 
 // DockFixedSide is the side a component is always drawn on, or "" when it goes
@@ -99,7 +106,7 @@ func DockFixedSide(name string) string { return dockFixedSides[name] }
 // and never a first one: naming a component makes it eligible to draw, not
 // certain to.
 var (
-	defaultDockLeft   = []string{DockComponentMode, DockComponentWorkspaces, DockComponentTrail, DockComponentTape}
+	defaultDockLeft   = []string{DockComponentMode, DockComponentPrivacy, DockComponentWorkspaces, DockComponentTrail, DockComponentTape}
 	defaultDockCenter = []string{DockComponentWindows}
 	defaultDockRight  = []string{
 		DockComponentTransfers,

@@ -786,6 +786,7 @@
         "cpu",
         "mode",
         "notifications",
+        "privacy",
         "ram",
         "session",
         "session-controls",
@@ -795,7 +796,7 @@
         "windows",
         "workspaces"
       ],
-      "max_items": 26,
+      "max_items": 28,
       "max_bytes": 32
     },
     {
@@ -808,13 +809,14 @@
       "path": "dock.left",
       "type": "list",
       "description": "The built-in cells on the left end of the dock, in order. An empty list draws nothing there.",
-      "default": "[\"mode\", \"workspaces\", \"trail\", \"tape\"]",
+      "default": "[\"mode\", \"privacy\", \"workspaces\", \"trail\", \"tape\"]",
       "items": [
         "clock",
         "copy-help",
         "cpu",
         "mode",
         "notifications",
+        "privacy",
         "ram",
         "session",
         "session-controls",
@@ -824,7 +826,7 @@
         "windows",
         "workspaces"
       ],
-      "max_items": 26,
+      "max_items": 28,
       "max_bytes": 32
     },
     {
@@ -838,6 +840,7 @@
         "cpu",
         "mode",
         "notifications",
+        "privacy",
         "ram",
         "session",
         "session-controls",
@@ -847,7 +850,7 @@
         "windows",
         "workspaces"
       ],
-      "max_items": 26,
+      "max_items": 28,
       "max_bytes": 32
     },
     {

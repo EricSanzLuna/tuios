@@ -458,6 +458,10 @@ func (m *OS) renderDockString() (string, int) {
 	m.recordSpotlightChip(0, 0, dockY)
 	// The calm mark rides after it on the same terms. See calm.go.
 	calm := m.calmChip()
+	// So does the privacy chip, when the plan does not place it. See privacy.go.
+	if !m.dockPlan.Has(config.DockComponentPrivacy) {
+		calm += m.privacyChip()
+	}
 	if !m.dockPlan.Has(config.DockComponentMode) {
 		if chip != "" {
 			m.recordSpotlightChip(leftX, chipW, dockY)
@@ -481,6 +485,8 @@ func (m *OS) renderDockString() (string, int) {
 			// Both dock paths render through here, so the tab hit rects are the
 			// drawn geometry rather than a second guess at it.
 			chunk = m.renderDockWorkspaceStrip(layout.WorkspaceStrip, leftX)
+		case config.DockComponentPrivacy:
+			chunk = m.privacyChip()
 		case config.DockComponentTrail:
 			chunk = styledTrailText
 		case config.DockComponentTape:

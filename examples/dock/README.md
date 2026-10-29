@@ -24,7 +24,7 @@ refresh = "event:after-focus-change"
 
 ```toml
 [dock]
-left   = ["mode", "workspaces", "trail", "tape"]
+left   = ["mode", "privacy", "workspaces", "trail", "tape"]
 center = ["windows"]
 right  = ["notifications", "copy-help", "cpu", "ram", "clock", "session-controls"]
 ```

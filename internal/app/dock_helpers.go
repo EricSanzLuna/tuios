@@ -892,6 +892,9 @@ func (m *OS) buildDockLeftText() (modeLabel, trail, tape string, width int, mode
 	// lists the mode: it is the way out of a dimmed screen, not a component.
 	width += m.spotlightChipWidth()
 	width += lipgloss.Width(m.calmChip())
+	// The privacy chip is drawn once, where the plan puts it or after the
+	// mode pill, so it claims its room either way.
+	width += lipgloss.Width(m.privacyChip())
 	width += 4
 
 	return modeLabel, trail, tape, width, modeInfo

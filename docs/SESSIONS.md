@@ -538,7 +538,7 @@ bind them in `[keybindings]`.
   border title.
 - `toggle_privacy` turns the mode on or off for this client. From a shell, run
   `tuios privacy on` or `tuios privacy off`, and `tuios privacy` to see the
-  mode. When the mode is on, the dock shows it.
+  mode. When the mode is on, the dock shows `Private` after the mode pill.
 
 While the mode is on, a private pane shows a placeholder with the pane's name,
 or "Private pane" when it has none. Nothing the pane prints reaches a
