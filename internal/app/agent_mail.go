@@ -391,7 +391,7 @@ func (m *OS) considerMailAlert(msg session.AgentMessage) {
 	default:
 		return
 	}
-	if !policy.Enabled || policy.Quiet(time.Now()) {
+	if !policy.Enabled || policy.Quiet(time.Now()) || m.hidesPane(m.windowByID(msg.From)) {
 		return
 	}
 	text := agentMailSender(msg) + " to " + agentMailName(msg.To, msg.ToLabel, true) + ": " + agentMailSummary(msg)

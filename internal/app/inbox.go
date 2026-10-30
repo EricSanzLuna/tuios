@@ -580,7 +580,7 @@ func (m *OS) announceResumes(items []session.AttentionItem) {
 	st := &m.Inbox
 	var fresh []session.AttentionItem
 	for _, it := range items {
-		if it.Kind != session.AttentionResume || it.Host != "" || st.announcedResume[it.ID] {
+		if it.Kind != session.AttentionResume || it.Host != "" || st.announcedResume[it.ID] || m.inboxItemHidden(it) {
 			continue
 		}
 		if st.announcedResume == nil {
@@ -696,6 +696,13 @@ func (m *OS) inboxChanged() {
 	m.sidebarCache.invalidate()
 }
 
+// inboxItemHidden reports whether an item is about a pane privacy mode
+// hides. Only the attached session's panes are known to this client: the
+// daemon's listing of another session carries no mark.
+func (m *OS) inboxItemHidden(it session.AttentionItem) bool {
+	return m.privacy && it.Window != "" && m.inboxAttached(it) && m.hidesPane(m.windowByID(it.Window))
+}
+
 // inboxAttached reports whether an item is in the session this client is
 // attached to, whose transitions the state sync already alerts on.
 func (m *OS) inboxAttached(it session.AttentionItem) bool {
@@ -794,7 +801,7 @@ func inboxAlertState(kind string) string {
 // not in the attached session, whose alerts come from the state sync, and the
 // policy alerts on its kind.
 func (m *OS) inboxAlertable(it session.AttentionItem, policy config.AgentAlertPolicy) bool {
-	if it.Stale {
+	if it.Stale || m.inboxItemHidden(it) {
 		return false
 	}
 	// No agent state moves when a question is asked, so the state sync says
@@ -1118,7 +1125,7 @@ func (m *OS) inboxRows() []inboxRow {
 		}
 		var items []inboxRow
 		for k := i; k < j; k++ {
-			if inboxFilterAdmits(st.Filter, st.Items[k].Kind) && m.inboxItemSelected(st.Items[k]) {
+			if inboxFilterAdmits(st.Filter, st.Items[k].Kind) && m.inboxItemSelected(st.Items[k]) && !m.inboxItemHidden(st.Items[k]) {
 				items = append(items, inboxRow{item: &st.Items[k]})
 			}
 		}

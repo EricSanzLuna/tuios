@@ -108,7 +108,7 @@ func agentActivityRecapCall(call inboxVerbCall, sessionID, windowID string, sinc
 // inboxRecapFor reports whether the Inbox shows a recap for an item: a
 // finished turn of a pane on this machine, with the recap not turned off.
 func (m *OS) inboxRecapFor(it session.AttentionItem) bool {
-	return it.Kind == session.AttentionFinished && it.Window != "" && it.Host == "" && !it.Stale &&
+	return it.Kind == session.AttentionFinished && it.Window != "" && it.Host == "" && !it.Stale && !m.inboxItemHidden(it) &&
 		m.recapSettings().Mode != config.RecapOff
 }
 

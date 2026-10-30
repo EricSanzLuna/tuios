@@ -182,7 +182,7 @@ func (m *OS) inboxAgentsList() []sidebarAgentEntry {
 	all := append(m.agentEntries(m.BuildSessionTree().Sessions), m.remoteAgentEntries()...)
 	kept := all[:0]
 	for _, e := range all {
-		if m.agentsKeep(e) {
+		if m.agentsKeep(e) && !m.agentEntryHidden(e) {
 			kept = append(kept, e)
 		}
 	}
@@ -222,6 +222,12 @@ func (m *OS) remoteAgentEntries() []sidebarAgentEntry {
 		}
 	}
 	return out
+}
+
+// agentEntryHidden reports whether an agent runs in a pane privacy mode
+// hides: the view would show its transcript, its recap and its screen.
+func (m *OS) agentEntryHidden(e sidebarAgentEntry) bool {
+	return m.privacy && e.Host == "" && !e.Foreign && m.hidesPane(m.windowByID(e.WindowID))
 }
 
 // agentsKeep reports whether a row passes the selector and the search.

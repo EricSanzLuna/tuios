@@ -80,6 +80,9 @@ func (m *OS) sessionNote(name string) string {
 // paneNote is the return note of one pane, else the note of its session.
 func (m *OS) paneNote(sessionName, windowID string) string {
 	if sessionName == m.SessionName {
+		if m.hidesPane(m.windowByID(windowID)) {
+			return m.sessionNote(sessionName)
+		}
 		if n := m.paneNotes[windowID]; n != "" {
 			return n
 		}
