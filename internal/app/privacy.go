@@ -62,6 +62,9 @@ func (m *OS) publishPrivacy() {
 			w.SetPrivacyHidden(m.hidesPane(w))
 		}
 	}
+	// The views that keep a copy of a pane's cells read it again.
+	m.pip.dirty, m.pip.boxKey = true, ""
+	m.Inbox.ck.live, m.Inbox.ck.liveDirty = "", true
 	m.MarkAllDirty()
 }
 
@@ -113,11 +116,16 @@ func (m *OS) TogglePanePrivate() {
 // words "Private pane". It is built from the window's size and name alone, so
 // nothing the pane printed can reach it.
 func privatePlaceholder(window *terminal.Window) string {
-	cols, rows := window.ContentWidth(), window.ContentHeight()
+	return privatePlaceholderSized(privateLabel(window), window.ContentWidth(), window.ContentHeight())
+}
+
+// privatePlaceholderSized is the placeholder for a pane named label, cols
+// by rows: the PiP and the navigator preview draw it at their own size.
+func privatePlaceholderSized(label string, cols, rows int) string {
 	if cols <= 0 || rows <= 0 {
 		return ""
 	}
-	lines := []string{privateLabel(window)}
+	lines := []string{label}
 	if lines[0] != privatePaneLabel {
 		lines = append(lines, privatePaneLabel)
 	}

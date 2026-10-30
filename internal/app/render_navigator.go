@@ -790,6 +790,9 @@ func (m *OS) navigatorScreen(s *navSession, p *navPane, width, rows int) []strin
 	if rows <= 0 {
 		return nil
 	}
+	if p.Hidden {
+		return strings.Split(privatePlaceholderSized(p.Name, width, rows), "\n")
+	}
 	if s.Current {
 		if i := m.windowIndexByID(p.ID); i >= 0 {
 			w := m.Windows[i]

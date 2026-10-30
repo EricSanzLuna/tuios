@@ -93,6 +93,9 @@ type navPane struct {
 	// TextSkipped says the load did not read the pane's screen, because it
 	// had read as many as it reads in one go.
 	TextSkipped bool
+	// Hidden says privacy mode hides the pane: its row carries only its
+	// name and its preview is the placeholder.
+	Hidden bool
 }
 
 // setText sets the pane's text and the lower case copy the search reads.
@@ -429,6 +432,7 @@ func (m *OS) navigatorCurrentSession() navSession {
 		if m.hidesPane(w) {
 			p := &s.Panes[len(s.Panes)-1]
 			p.Name, p.Title, p.Command, p.Cwd = privateLabel(w), "", "", ""
+			p.Hidden = true
 			continue
 		}
 		s.Panes[len(s.Panes)-1].setText(navScreenText(w, navTextLines))
@@ -531,6 +535,7 @@ func (m *OS) navigatorLoad() tea.Cmd {
 	hold := navHoldForTest()
 	maxCaptures := navMaxCapturesInForce()
 	ink := navThemeInk()
+	hide := m.privacy
 	return func() tea.Msg {
 		defer cancel()
 		hold(ctx)
@@ -572,6 +577,7 @@ func (m *OS) navigatorLoad() tea.Cmd {
 						continue
 					}
 					s, ok, inStep := navLoadSession(ctx, c, job.Host, job.Name)
+					navHidePrivate(&s, hide)
 					if !inStep {
 						_ = c.Close()
 						c = dial()
@@ -591,6 +597,9 @@ func (m *OS) navigatorLoad() tea.Cmd {
 					for i := range s.Panes {
 						if ctx.Err() != nil {
 							break
+						}
+						if s.Panes[i].Hidden {
+							continue
 						}
 						if captures.Add(1) > int64(maxCaptures) {
 							s.Panes[i].TextSkipped = true
@@ -690,6 +699,23 @@ func navMaxCapturesInForce() int {
 	return navMaxCaptures
 }
 
+// navHidePrivate keeps what a session's private panes printed out of the
+// navigator while privacy mode is on: such a pane keeps its row, named
+// "Private pane", and its screen is not read. With the mode off the mark
+// is dropped and the pane is read like any other.
+func navHidePrivate(s *navSession, hide bool) {
+	for i := range s.Panes {
+		p := &s.Panes[i]
+		if !hide {
+			p.Hidden = false
+			continue
+		}
+		if p.Hidden {
+			p.Name, p.Title, p.Cwd, p.Command, p.Cmdline = privatePaneLabel, "", "", "", ""
+		}
+	}
+}
+
 // navLoadSession reads a session's panes and workspace names.
 //
 // ok is false when the panes could not be read. inStep is false when a call
@@ -713,6 +739,7 @@ func navLoadSession(ctx context.Context, c *session.VerbClient, host, name strin
 			Workspace  int    `json:"workspace"`
 			Scratch    bool   `json:"scratch"`
 			AgentState string `json:"agent_state"`
+			Private    bool   `json:"private"`
 		} `json:"windows"`
 	}
 	if json.Unmarshal(raw, &list) != nil {
@@ -730,6 +757,7 @@ func navLoadSession(ctx context.Context, c *session.VerbClient, host, name strin
 		s.Panes = append(s.Panes, navPane{
 			ID: w.ID, Name: w.Display, Title: w.Title, Cwd: w.Cwd, Command: w.Command, Cmdline: w.Cmdline,
 			Workspace: w.Workspace, Focused: w.ID == list.Focused, AgentState: state,
+			Hidden: w.Private,
 		})
 	}
 	s.Count = len(s.Panes)

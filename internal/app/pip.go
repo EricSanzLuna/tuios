@@ -470,7 +470,10 @@ func (m *OS) pipReadBody(src *terminal.Window, cols, rows int) {
 		return
 	}
 	body := ""
-	if src.Terminal != nil {
+	switch {
+	case src.PrivacyHidden():
+		body = privatePlaceholderSized(privateLabel(src), cols, rows)
+	case src.Terminal != nil:
 		body = pipCells(src.Terminal, cols, rows)
 	}
 	src.RUnlockIO()

@@ -77,7 +77,7 @@ func (m *OS) cockpitLiveWindow(e sidebarAgentEntry) *terminal.Window {
 		return nil
 	}
 	w := m.windowByID(e.WindowID)
-	if w == nil || w.Terminal == nil {
+	if w == nil || w.Terminal == nil || m.hidesPane(w) {
 		return nil
 	}
 	return w
