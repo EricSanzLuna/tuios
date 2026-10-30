@@ -88,6 +88,9 @@ func (m *OS) EditScrollbackInEditor() tea.Cmd {
 		m.ShowNotification(reason, "warning", m.Settings.NotificationDuration)
 		return nil
 	}
+	if m.RefusePrivate(m.GetFocusedWindow()) {
+		return nil
+	}
 	w := m.GetFocusedWindow()
 	if w == nil || w.Terminal == nil {
 		m.ShowNotification("No pane is open. Open a pane to edit its scrollback.", "warning", m.Settings.NotificationDuration)

@@ -191,6 +191,9 @@ func (m *OS) openHints(all bool) {
 		m.ShowNotification("Open a pane first. Hints label the text in a pane.", "info", m.Settings.NotificationDuration)
 		return
 	}
+	if m.RefusePrivate(window) {
+		return
+	}
 	cfg := m.hintsConfig()
 	builtins, _ := hints.ParseBuiltins(cfg.Builtins)
 	matcher, errs := hints.New(builtins, cfg.Patterns)
@@ -214,6 +217,10 @@ func (m *OS) openHints(all bool) {
 	// has none.
 	var hidden []func(hintCell) bool
 	for rank, w := range windows {
+		// The other panes a hidden one is among are labelled; it is not.
+		if m.hidesPane(w) {
+			continue
+		}
 		pane := snapshotHints(w)
 		pane.x, pane.y = w.X, w.Y
 		cursor := hintsCursor(w, pane)

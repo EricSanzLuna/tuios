@@ -189,6 +189,9 @@ func OpenScrollbackBrowser(o *app.OS) {
 		o.ShowNotification("No terminal to browse", "warning", 2*time.Second)
 		return
 	}
+	if o.RefusePrivate(focusedWindow) {
+		return
+	}
 
 	term := focusedWindow.Terminal
 

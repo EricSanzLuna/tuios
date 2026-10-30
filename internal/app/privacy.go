@@ -58,10 +58,16 @@ func (m *OS) hidesPane(w *terminal.Window) bool {
 // or its placeholder.
 func (m *OS) publishPrivacy() {
 	for _, w := range m.Windows {
-		if w != nil {
-			w.SetPrivacyHidden(m.hidesPane(w))
+		if w == nil {
+			continue
+		}
+		hidden := m.hidesPane(w)
+		w.SetPrivacyHidden(hidden)
+		if hidden && w.InCopyMode() {
+			w.ExitCopyMode()
 		}
 	}
+	m.CloseHints()
 	// The views that keep a copy of a pane's cells read it again.
 	m.pip.dirty, m.pip.boxKey = true, ""
 	m.Inbox.ck.live, m.Inbox.ck.liveDirty = "", true
@@ -156,6 +162,21 @@ func privatePlaceholderSized(label string, cols, rows int) string {
 		b.WriteString(strings.Repeat(" ", cols-left-w))
 	}
 	return b.String()
+}
+
+// privateRefusal is what the dock says when an action that reads a pane's
+// text is refused because privacy mode hides the pane.
+const privateRefusal = privatePaneLabel + ": hidden while privacy mode is on"
+
+// RefusePrivate reports whether w is hidden, and says so in the dock when it
+// is. The actions that read a pane's text (copy mode, hints, the scrollback
+// browser and editor, a window screenshot) call it first.
+func (m *OS) RefusePrivate(w *terminal.Window) bool {
+	if !m.hidesPane(w) {
+		return false
+	}
+	m.ShowNotification(privateRefusal, "info", m.Settings.NotificationDuration)
+	return true
 }
 
 // shownWindowName is getWindowDisplayName for a surface that shows it: the

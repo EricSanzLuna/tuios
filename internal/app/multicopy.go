@@ -109,6 +109,9 @@ func (m *OS) MultiCopyEligible() (int, bool) {
 // or more visible panes, and plain copy mode on the focused pane otherwise. A
 // person who never uses multifocus sees no change.
 func (m *OS) EnterCopyModeFocused() {
+	if m.RefusePrivate(m.GetFocusedWindow()) {
+		return
+	}
 	if _, ok := m.MultiCopyEligible(); ok {
 		m.EnterMultiCopyMode()
 		return

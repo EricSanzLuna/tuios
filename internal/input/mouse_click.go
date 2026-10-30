@@ -517,7 +517,8 @@ func handleMouseClick(msg tea.MouseClickMsg, o *app.OS) (*app.OS, tea.Cmd) {
 	//
 	// Panes running an application with mouse tracking never reach here; their
 	// press was forwarded to the application further up, exactly as the wheel is.
-	if mouse.Button == tea.MouseLeft && (clickedWindow.InCopyMode() || o.Mode == app.TerminalMode) {
+	// A hidden pane has no text to select: copy mode refuses it.
+	if mouse.Button == tea.MouseLeft && (clickedWindow.InCopyMode() || o.Mode == app.TerminalMode) && !clickedWindow.PrivacyHidden() {
 		terminalX, terminalY, inContent := clickedWindow.ScreenToTerminal(X, Y)
 		if inContent {
 			o.FocusWindowFromClick(clickedWindowIndex, X, Y)

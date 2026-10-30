@@ -253,6 +253,9 @@ func (m *OS) ScreenshotWindow(index int) tea.Cmd {
 		return nil
 	}
 	win := m.Windows[index]
+	if m.RefusePrivate(win) {
+		return nil
+	}
 	// A pane on its own is drawn on the ground the pane background paints. A
 	// region capture is not: it reads the composed frame, whose pane cells
 	// already carry the paint and whose chrome does not.

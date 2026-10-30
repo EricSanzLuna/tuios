@@ -93,6 +93,11 @@ func (w *Window) copyEntryCursor() (int, int) {
 }
 
 func (w *Window) enterCopyMode(x, y int) {
+	// Copy mode draws the pane's text and history, which privacy mode
+	// hides. The client says why it refused (see app/privacy.go).
+	if w.PrivacyHidden() {
+		return
+	}
 	if w.CopyMode == nil {
 		w.CopyMode = &CopyMode{}
 	}
