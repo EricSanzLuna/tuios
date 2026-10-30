@@ -179,6 +179,20 @@ func (m *OS) RefusePrivate(w *terminal.Window) bool {
 	return true
 }
 
+// foreignPaneHidden reports whether privacy mode hides a pane of another
+// session on this machine, from the daemon's listing of that session.
+func (m *OS) foreignPaneHidden(sessionName, windowID string) bool {
+	if !m.privacy || m.DaemonClient == nil {
+		return false
+	}
+	for _, w := range m.DaemonClient.SessionWindows(sessionName) {
+		if w.ID == windowID {
+			return w.Private
+		}
+	}
+	return false
+}
+
 // shownWindowName is getWindowDisplayName for a surface that shows it: the
 // private label for a hidden pane. getWindowDisplayName itself stays real,
 // since tape scripts find windows by it.

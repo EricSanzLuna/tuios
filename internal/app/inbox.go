@@ -697,10 +697,17 @@ func (m *OS) inboxChanged() {
 }
 
 // inboxItemHidden reports whether an item is about a pane privacy mode
-// hides. Only the attached session's panes are known to this client: the
-// daemon's listing of another session carries no mark.
+// hides: a pane of the attached session, or of another session on this
+// machine whose listing marks it private. Another machine's panes are not
+// known to be private.
 func (m *OS) inboxItemHidden(it session.AttentionItem) bool {
-	return m.privacy && it.Window != "" && m.inboxAttached(it) && m.hidesPane(m.windowByID(it.Window))
+	if !m.privacy || it.Window == "" || it.Host != "" {
+		return false
+	}
+	if m.inboxAttached(it) {
+		return m.hidesPane(m.windowByID(it.Window))
+	}
+	return m.foreignPaneHidden(it.Session, it.Window)
 }
 
 // inboxAttached reports whether an item is in the session this client is

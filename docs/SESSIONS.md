@@ -552,9 +552,14 @@ different surface:
   show no title, directory or message from the pane.
 - Notifications from the pane (OSC 9 and OSC 777) do not show and do not reach
   your desktop.
+- The Inbox shows no item from the pane and raises no alert for it. The
+  agents view leaves its agent out, and its return note is not shown.
 - Link hover does not underline links in the pane.
-- Copy mode, hints, peek, yank and mouse selection on the pane are refused,
-  and the dock says why.
+- Copy mode, hints, the scrollback browser and editor, a window screenshot
+  and mouse selection on the pane are refused, and the dock says why.
+
+A private pane of a session on another machine is not known to be private
+here, so its Inbox items still show.
 
 The marks are in the session state. A pane stays marked after a reattach or a
 daemon restart. The mode is each client's own and is not saved: it starts

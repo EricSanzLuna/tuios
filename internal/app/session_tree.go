@@ -173,7 +173,15 @@ func (m *OS) foreignSessionInput(client *session.TUIClient, name string) session
 		message, kind := m.paneAskNote(w.ID, w.AgentMessage, w.AgentKind)
 		// The daemon folds a custom name into Title and withholds a command for
 		// a named pane, so passing no name here still lets one win.
-		title := railWindowLabel("", w.AgentHarness, w.ForegroundCmd, w.Title)
+		var title string
+		if m.privacy && w.Private {
+			// A private pane of another session: since the title may carry
+			// the custom name, the private label stands in for both.
+			title, w.ForegroundCmd, message = privatePaneLabel, "", ""
+			w.AgentMeta, w.SubagentList, w.ProgramStatus = nil, nil, nil
+		} else {
+			title = railWindowLabel("", w.AgentHarness, w.ForegroundCmd, w.Title)
+		}
 		windows = append(windows, sessiontree.WindowInput{
 			ID:           w.ID,
 			Title:        title,

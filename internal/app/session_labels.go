@@ -87,6 +87,9 @@ func (m *OS) paneNote(sessionName, windowID string) string {
 			return n
 		}
 	} else if m.DaemonClient != nil {
+		if m.foreignPaneHidden(sessionName, windowID) {
+			return m.sessionNote(sessionName)
+		}
 		if n := m.DaemonClient.SessionWindowNote(sessionName, windowID); n != "" {
 			return n
 		}

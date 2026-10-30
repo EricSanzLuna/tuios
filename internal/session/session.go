@@ -3963,6 +3963,7 @@ func (s *Session) windowSummaries() []WindowSummary {
 			// terminal is, and an older reader knows only this mark.
 			Scratch: w.Scratch || w.Rail != "",
 			Note:    w.Note,
+			Private: w.Private,
 		})
 	}
 	return out

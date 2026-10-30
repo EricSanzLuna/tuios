@@ -616,6 +616,10 @@ type WindowSummary struct {
 	// Note is the pane's return note (WindowState.Note). Additive and omitted
 	// when empty, which is what an older peer sends.
 	Note string `json:"note,omitempty"`
+	// Private is the pane's privacy mark (WindowState.Private). A client in
+	// privacy mode shows such a pane of another session by no title, message
+	// or note. Additive and omitted when false.
+	Private bool `json:"private,omitempty"`
 }
 
 // ClientInfo describes one daemon connection for listing.
