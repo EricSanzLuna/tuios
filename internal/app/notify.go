@@ -85,6 +85,11 @@ func (m *OS) setupNotificationPassthrough(window *terminal.Window) {
 	// worst case is one notification held for the previous duration.
 
 	window.NotifyFunc = func(title, body string) {
+		// A hidden pane's notification is its own text. It is dropped, not
+		// held: shown later it would still say what the pane was doing.
+		if window.PrivacyHidden() {
+			return
+		}
 		mu.Lock()
 		if time.Since(lastNotify) < notifyRateLimit {
 			mu.Unlock()

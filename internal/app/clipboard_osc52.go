@@ -87,6 +87,9 @@ func (m *OS) noteFocusedCopy(msg ClipboardSetMsg) {
 		quoted = string(preview[:clipboardPreviewLen]) + "..."
 	}
 	text := fmt.Sprintf("%s copied %d lines to the clipboard: %q.", m.clipboardPaneName(msg.WindowID), lines, quoted)
+	if m.hidesPane(m.windowByID(msg.WindowID)) {
+		text = fmt.Sprintf("%s copied %d lines to the clipboard.", m.clipboardPaneName(msg.WindowID), lines)
+	}
 	if id := m.clipboardCopyNotes[msg.WindowID]; id != "" {
 		for i := range m.Notifications {
 			if m.Notifications[i].ID == id {
@@ -157,6 +160,10 @@ func (m *OS) clipboardAskText(ask *clipboardAsk) string {
 	quoted := string(preview)
 	if len(preview) > clipboardPreviewLen {
 		quoted = string(preview[:clipboardPreviewLen]) + "..."
+	}
+	if m.hidesPane(m.windowByID(ask.windowID)) {
+		return fmt.Sprintf("%s asks to copy %d characters to the clipboard. Click this message to allow it.",
+			m.clipboardPaneName(ask.windowID), len([]rune(ask.text)))
 	}
 	return fmt.Sprintf("%s asks to copy %d characters to the clipboard: %q. Click this message to allow it.",
 		m.clipboardPaneName(ask.windowID), len([]rune(ask.text)), quoted)

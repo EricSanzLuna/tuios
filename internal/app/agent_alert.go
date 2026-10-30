@@ -143,7 +143,7 @@ func (m *OS) fireAgentAlert(w *terminal.Window, from, to string, policy config.A
 	// The reason, when the pane gave one: the question a blocked agent asked,
 	// or the note a report carried. Without it the alert says that the agent
 	// needs somebody and not what it wants, and the person has to go and look.
-	if note := printableTitle(w.AgentMessage); note != "" {
+	if note := printableTitle(m.agentAlertNote(w)); note != "" {
 		text += agentAlertSep() + note
 	}
 
@@ -203,7 +203,7 @@ func (m *OS) fireAgentAlertOutside(w *terminal.Window, from, to, name, text stri
 		AgentState:     to,
 		PrevAgentState: from,
 		AgentHarness:   w.AgentHarness,
-		AgentMessage:   w.AgentMessage,
+		AgentMessage:   m.agentAlertNote(w),
 	})
 }
 
@@ -303,7 +303,7 @@ func (m *OS) flushProgramAlerts(now time.Time) {
 		}
 		name := m.agentAlertName(w)
 		text := name + " " + word
-		if note := printableTitle(w.AgentMessage); note != "" {
+		if note := printableTitle(m.agentAlertNote(w)); note != "" {
 			text += agentAlertSep() + note
 		}
 		pa.at, pa.to = now, p.to
@@ -328,6 +328,15 @@ func (m *OS) pruneProgramAlerts() {
 			delete(m.programAlerts, id)
 		}
 	}
+}
+
+// agentAlertNote is the note an alert quotes: the message the pane's agent
+// reported, or nothing while privacy mode hides the pane.
+func (m *OS) agentAlertNote(w *terminal.Window) string {
+	if m.hidesPane(w) {
+		return ""
+	}
+	return w.AgentMessage
 }
 
 // agentAlertName is how an alert names a pane: its title, and for a pane

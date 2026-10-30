@@ -209,7 +209,7 @@ func (m *OS) hostProgramStatusReports() map[string]string {
 			r.App = progstatus.FitSegment(app, progstatus.MaxApp)
 		}
 		r.Title = hostStatusText(m.railTitleShown(w), progstatus.MaxTitleDecoded)
-		r.Msg = hostStatusText(w.AgentMessage, progstatus.MaxMsgDecoded)
+		r.Msg = hostStatusText(m.agentAlertNote(w), progstatus.MaxMsgDecoded)
 		want[r.ID] = progstatus.Encode(r)
 	}
 	return want

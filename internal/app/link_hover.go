@@ -86,7 +86,7 @@ func linksEnabled(s *config.Settings) bool { return s.Links != config.LinksOff }
 // times a second, so a skipped resolution costs one frame of a stale underline
 // and nothing else.
 func resolvePaneLink(window *terminal.Window, x, y int, s *config.Settings) (PaneLink, bool) {
-	if window == nil || window.Terminal == nil || !linksEnabled(s) {
+	if window == nil || window.Terminal == nil || !linksEnabled(s) || window.PrivacyHidden() {
 		return PaneLink{}, false
 	}
 	if !window.TryRLockIO() {

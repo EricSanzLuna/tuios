@@ -65,6 +65,7 @@ func (m *OS) publishPrivacy() {
 	// The views that keep a copy of a pane's cells read it again.
 	m.pip.dirty, m.pip.boxKey = true, ""
 	m.Inbox.ck.live, m.Inbox.ck.liveDirty = "", true
+	m.clearLinkHover()
 	m.MarkAllDirty()
 }
 
