@@ -402,6 +402,9 @@ func (m *OS) JumpToPiP() bool {
 // pipPaneName is how the view and its messages name a pane: the name the
 // user gave it, else the title its program set, else its short id.
 func pipPaneName(w *terminal.Window) string {
+	if w.PrivacyHidden() {
+		return printableTitle(privateLabel(w))
+	}
 	if w.CustomName != "" {
 		return printableTitle(w.CustomName)
 	}

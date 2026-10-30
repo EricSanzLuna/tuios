@@ -47,6 +47,9 @@ func (m *OS) GetAggregateViewItems() []AggregateViewItem {
 		// Cached per window and refreshed at most once a second, so building
 		// the list does not cost a readlink per window per keystroke.
 		cwd := w.CWD()
+		if m.hidesPane(w) {
+			title, cwd = printableTitle(privateLabel(w)), ""
+		}
 
 		items = append(items, AggregateViewItem{
 			Window:      w,

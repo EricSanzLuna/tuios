@@ -258,6 +258,9 @@ func (m *OS) paneIsLocal(w *terminal.Window) bool {
 // it is a pid on that machine, and reading it here reads some other process or
 // none.
 func (m *OS) paneDir(w *terminal.Window) string {
+	if m.hidesPane(w) {
+		return ""
+	}
 	if w != nil && !m.paneIsLocal(w) {
 		return w.Cwd
 	}

@@ -113,6 +113,9 @@ func (m *OS) GitSyncCmd() tea.Cmd {
 // such as on native Windows, it is the reported one.
 func (m *OS) gitWantDir() string {
 	w := m.GetFocusedWindow()
+	if m.hidesPane(w) {
+		return ""
+	}
 	if w != nil && m.paneIsLocal(w) && !(m.filesView.Pinned && m.filesView.Origin == w.ID) {
 		if dir, ok := paneShellDir(w, false); ok {
 			return dir

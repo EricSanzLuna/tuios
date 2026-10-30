@@ -16,6 +16,9 @@ import (
 
 // windowRowTitle is the label a session-management surface shows for a window.
 func windowRowTitle(w *terminal.Window) string {
+	if w.PrivacyHidden() {
+		return privateLabel(w)
+	}
 	if label, ok := tmlRailLabel(w); ok {
 		return label
 	}
@@ -98,7 +101,7 @@ func (m *OS) currentSessionInput() sessiontree.SessionInput {
 		state, seen := m.railAgentState(w.ID, w.AgentState, w.AgentCompletionSeq)
 		message, kind := m.paneAskNote(w.ID, w.AgentMessage, w.AgentKind)
 		title := m.railTitleShown(w)
-		windows = append(windows, sessiontree.WindowInput{
+		row := sessiontree.WindowInput{
 			ID:           w.ID,
 			Title:        title,
 			AgentUnnamed: agentRowUnnamed(w.CustomName, w.AgentHarness, w.ForegroundCmd, title),
@@ -120,7 +123,14 @@ func (m *OS) currentSessionInput() sessiontree.SessionInput {
 			Workspace:    w.Workspace,
 			Host:         w.Host,
 			HostLink:     w.HostLink,
-		})
+		}
+		// A hidden pane keeps its state, which says only that it is busy or
+		// waiting, and loses everything its program wrote.
+		if m.hidesPane(w) {
+			row.Message, row.Meta, row.SubagentList = "", nil, nil
+			row.Program = sessiontree.WindowInput{}.Program
+		}
+		windows = append(windows, row)
 	}
 	name := m.SessionName
 	if name == "" {

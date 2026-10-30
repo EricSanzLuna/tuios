@@ -339,7 +339,7 @@ func (m *OS) MultiCopyPaneFor(w *terminal.Window, text string) MultiCopyPane {
 	return MultiCopyPane{
 		Index:    m.WindowIndex(w),
 		WindowID: w.ID,
-		Title:    m.getWindowDisplayName(w),
+		Title:    m.shownWindowName(w),
 		Lines:    strings.Split(text, "\n"),
 	}
 }

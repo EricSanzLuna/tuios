@@ -307,7 +307,9 @@ func (m *OS) renderStackRows() []*lipgloss.Layer {
 				y = open.Y + open.Height + (i - at - 1)
 			}
 			label := w.CustomName
-			if label == "" {
+			if m.hidesPane(w) {
+				label = privateLabel(w)
+			} else if label == "" {
 				label = w.Title()
 			}
 			text := " ▸ " + truncateRunes(label, max(open.Width-4, 1))

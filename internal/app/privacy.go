@@ -149,6 +149,16 @@ func privatePlaceholder(window *terminal.Window) string {
 	return b.String()
 }
 
+// shownWindowName is getWindowDisplayName for a surface that shows it: the
+// private label for a hidden pane. getWindowDisplayName itself stays real,
+// since tape scripts find windows by it.
+func (m *OS) shownWindowName(w *terminal.Window) string {
+	if m.hidesPane(w) {
+		return privateLabel(w)
+	}
+	return m.getWindowDisplayName(w)
+}
+
 // privateLabel is the name a hidden pane shows: the name the user gave it, or
 // privatePaneLabel.
 func privateLabel(w *terminal.Window) string {

@@ -202,7 +202,7 @@ func (m *OS) railCustomComponent() *dockComponent {
 // folder is left for the run to resolve (railContext.folder).
 func (m *OS) railContextNow() railContext {
 	ctx := railContext{}
-	if w := m.GetFocusedWindow(); w != nil {
+	if w := m.GetFocusedWindow(); w != nil && !m.hidesPane(w) {
 		ctx.PaneID = w.ID
 		ctx.Remote = m.AttachedHost != ""
 		switch {

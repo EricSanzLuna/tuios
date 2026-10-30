@@ -220,6 +220,9 @@ func contextMenuWindowName(m *OS, windowIndex int, fallback string) string {
 	if win.CustomName != "" {
 		return win.CustomName
 	}
+	if m.hidesPane(win) {
+		return privatePaneLabel
+	}
 	if title := win.Title(); title != "" && !isDefaultTitle(title, win.ID) {
 		return title
 	}

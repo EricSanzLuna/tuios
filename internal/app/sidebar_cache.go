@@ -449,6 +449,7 @@ func (m *OS) sidebarSignature() uint64 {
 			continue
 		}
 		mixS(w.ID)
+		mixB(m.hidesPane(w))
 		mixS(m.railTitleShown(w))
 		mixS(w.AgentState)
 		// A finished turn changes how the row is drawn with no state change of

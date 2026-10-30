@@ -26,6 +26,10 @@ type railTitleEntry struct {
 // window: the debounced value once seeded, else the live title so a freshly
 // spawned pane is never blank. Pure read; the tick owns the bookkeeping.
 func (m *OS) railTitleShown(w *terminal.Window) string {
+	// A hidden pane's debounced title is still the one its program set.
+	if m.hidesPane(w) {
+		return privateLabel(w)
+	}
 	if e, ok := m.sidebarTitles[w.ID]; ok {
 		return e.shown
 	}

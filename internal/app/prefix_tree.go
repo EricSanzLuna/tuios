@@ -28,7 +28,11 @@ func (m *OS) MarkPane() {
 		return
 	}
 	m.setMarkedPane(w.ID)
-	m.ShowNotification("Pane marked: "+w.Title(), "info", m.Settings.NotificationDuration)
+	name := w.Title()
+	if m.hidesPane(w) {
+		name = privateLabel(w)
+	}
+	m.ShowNotification("Pane marked: "+name, "info", m.Settings.NotificationDuration)
 }
 
 // markedPaneBadge is what the title bar of the marked pane carries after its

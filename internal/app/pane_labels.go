@@ -116,7 +116,7 @@ func (m *OS) OpenPaneLabels() {
 		state.panes = append(state.panes, paneLabel{
 			windowID: w.ID,
 			label:    labels[i],
-			name:     m.getWindowDisplayName(w),
+			name:     m.shownWindowName(w),
 			shown:    m.hintsDrawn(w) && paneLabelFits(m.paneLabelVisible(w), labels[i]),
 		})
 	}

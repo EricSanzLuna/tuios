@@ -132,6 +132,10 @@ func (m *OS) sessionPlace(name string) (dir, branch string) {
 	if m.DaemonClient == nil {
 		return "", ""
 	}
+	// This session's place is its focused pane's folder and branch.
+	if name == m.SessionName && m.hidesPane(m.GetFocusedWindow()) {
+		return "", ""
+	}
 	dir, branch = m.DaemonClient.SessionPlace(name)
 	if !session.IsGeneratedSessionName(name) {
 		dir = ""

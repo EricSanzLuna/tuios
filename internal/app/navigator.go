@@ -426,6 +426,11 @@ func (m *OS) navigatorCurrentSession() navSession {
 			DoneSeen:   seen,
 			Subagents:  w.AgentSubagents,
 		})
+		if m.hidesPane(w) {
+			p := &s.Panes[len(s.Panes)-1]
+			p.Name, p.Title, p.Command, p.Cwd = privateLabel(w), "", "", ""
+			continue
+		}
 		s.Panes[len(s.Panes)-1].setText(navScreenText(w, navTextLines))
 	}
 	s.Count = len(s.Panes)

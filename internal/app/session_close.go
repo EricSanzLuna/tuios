@@ -179,6 +179,9 @@ func (m *OS) windowCloseLabel(i int) string {
 		return "that pane"
 	}
 	w := m.Windows[i]
+	if m.hidesPane(w) {
+		return "pane '" + printableTitle(privateLabel(w)) + "'"
+	}
 	if name := printableTitle(w.Title()); name != "" {
 		return "pane '" + name + "'"
 	}
