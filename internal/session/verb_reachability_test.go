@@ -75,6 +75,8 @@ var exampleOutcomes = map[string]exampleOutcome{
 	"refresh-dock#1":         {errCode: ErrVerbNeedsClient, why: "the dock is drawn by a client"},
 	"pip#0":                  {errCode: ErrVerbNeedsClient, why: "the picture-in-picture view is drawn by a client"},
 	"pip#1":                  {errCode: ErrVerbNeedsClient, why: "the picture-in-picture view is drawn by a client"},
+	"privacy#0":              {errCode: ErrVerbNeedsClient, why: "privacy mode belongs to a client"},
+	"privacy#1":              {errCode: ErrVerbNeedsClient, why: "privacy mode belongs to a client"},
 	"popup#0":                {errCode: ErrVerbNeedsClient, why: "a popup is a client window"},
 	"tml-open#0":             {errCode: ErrVerbNeedsClient, why: "a popup is a client window"},
 	"tml-open#2":             {errCode: ErrVerbNeedsClient, why: "a popup is a client window"},

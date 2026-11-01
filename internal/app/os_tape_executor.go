@@ -281,6 +281,9 @@ func (m *OS) getWindowInfo(w *terminal.Window, isFocused bool) map[string]any {
 	if w.IsScratch {
 		info["scratch"] = true
 	}
+	if w.Private {
+		info["private"] = true
+	}
 
 	if w.PTYID != "" {
 		info["pty_id"] = w.PTYID
